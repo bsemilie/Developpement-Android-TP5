@@ -15,16 +15,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private val createBookActivityRequestCode = 1;
     var bookshelf = Bookshelf();
-    var bookAdapter= BookAdapter(ArrayList(bookshelf.getAllBooks()))
-    lateinit var recyclerView : RecyclerView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        recyclerView = findViewById<RecyclerView>(R.id.listBook)
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = bookAdapter
+        displayBookList()
+
     }
 
     fun goToCreation(view: View) {
@@ -37,9 +34,15 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == this.createBookActivityRequestCode){
             bookshelf.addBook(data?.getSerializableExtra("Book") as Book);
         }
-        bookAdapter.refreshBooks(ArrayList(bookshelf.getAllBooks()))
-        recyclerView.adapter = bookAdapter
+        displayBookList()
 
+    }
+
+    fun displayBookList(){
+        val bookListFragment = BookListFragment.newInstance(bookshelf.getAllBooks())
+        val bookListFragmentTransaction = supportFragmentManager.beginTransaction()
+        bookListFragmentTransaction.replace(R.id.relative_layout, bookListFragment)
+        bookListFragmentTransaction.commit()
 
     }
 
