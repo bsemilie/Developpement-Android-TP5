@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BookCreator {
     private val createBookActivityRequestCode = 1;
     var bookshelf = Bookshelf();
 
@@ -39,18 +39,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun goToCreation(view: View) {
-        val intent = Intent(this, CreateBookActivity::class.java)
-        startActivityForResult(intent, this.createBookActivityRequestCode)
+        displayCreation()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == this.createBookActivityRequestCode){
-            bookshelf.addBook(data?.getSerializableExtra("Book") as Book);
-        }
-        displayBookList()
-
-    }
 
     fun displayBookList(){
         val bookListFragment = BookListFragment.newInstance(bookshelf.getAllBooks())
@@ -60,5 +51,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun displayCreation(){
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val createBookFragment = CreateBookFragment()
+
+        fragmentTransaction.replace(R.id.frame_layout, createBookFragment)
+        fragmentTransaction.commit()
+    }
+
+    override fun onBookCreated(book: Book) {
+        bookshelf.addBook(book)
+        displayBookList()
+    }
 
 }
