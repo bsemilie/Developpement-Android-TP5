@@ -32,8 +32,8 @@
         app:layout_constraintHorizontal_bias="0.945"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <RelativeLayout
-        android:id="@+id/relative_layout"
+    <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="409dp"
         android:layout_height="588dp"
         android:layout_marginStart="1dp"
@@ -41,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Welcome">
 
-    </RelativeLayout>
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

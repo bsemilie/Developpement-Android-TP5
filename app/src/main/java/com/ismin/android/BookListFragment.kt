@@ -27,9 +27,8 @@ class BookListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            books = it.getSerializable(BOOKS) as ArrayList<Book>
-        }
+        books = arguments!!.getSerializable(BOOKS) as ArrayList<Book>
+
 
     }
 
@@ -56,13 +55,13 @@ class BookListFragment : Fragment() {
          * @param books Array of books
          * @return A new instance of fragment BookListFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(books: ArrayList<Book>) =
-            BookListFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(BOOKS, books)
-                }
+        fun newInstance(books: ArrayList<Book>): BookListFragment{
+            val bundle = Bundle();
+            bundle.putSerializable(BOOKS, books)
+            val bookListFragment = BookListFragment();
+            bookListFragment.arguments = bundle;
+            return bookListFragment;
             }
     }
 }

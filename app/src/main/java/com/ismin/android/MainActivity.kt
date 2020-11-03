@@ -2,24 +2,38 @@ package com.ismin.android
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val createBookActivityRequestCode = 1;
     var bookshelf = Bookshelf();
 
+    private val theLordOfTheRings = Book(
+        title = "The Lord of the Rings",
+        author = "J. R. R. Tolkien",
+        date = "1954-02-15"
+    )
+
+    private val theHobbit = Book(
+        title = "The Hobbit",
+        author = "J. R. R. Tolkien",
+        date = "1937-09-21"
+    )
+    private val aLaRechercheDuTempsPerdu = Book(
+        title = "À la recherche du temps perdu",
+        author = "Marcel Proust",
+        date = "1927"
+    );
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        this.bookshelf.addBook(theLordOfTheRings)
+        this.bookshelf.addBook(theHobbit)
+        this.bookshelf.addBook(aLaRechercheDuTempsPerdu)
+
+
         displayBookList()
 
     }
@@ -41,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     fun displayBookList(){
         val bookListFragment = BookListFragment.newInstance(bookshelf.getAllBooks())
         val bookListFragmentTransaction = supportFragmentManager.beginTransaction()
-        bookListFragmentTransaction.replace(R.id.relative_layout, bookListFragment)
+        bookListFragmentTransaction.replace(R.id.frame_layout, bookListFragment)
         bookListFragmentTransaction.commit()
 
     }

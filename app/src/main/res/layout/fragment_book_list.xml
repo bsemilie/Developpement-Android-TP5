@@ -9,10 +9,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/f_list_book"
-        android:layout_width="390dp"
-        android:layout_height="547dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="92dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/row_book" />
