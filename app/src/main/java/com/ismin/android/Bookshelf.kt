@@ -54,4 +54,8 @@ class Bookshelf {
         val lclBookshelf = this.bookshelf.filter { it.date <= adate };
         return lclBookshelf;
     }
+
+    fun clear(): Unit {
+        this.bookshelf.clear()
+    }
 }
