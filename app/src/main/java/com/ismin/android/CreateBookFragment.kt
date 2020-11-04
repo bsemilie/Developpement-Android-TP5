@@ -1,11 +1,13 @@
 package com.ismin.android
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.EditText
 
@@ -22,19 +24,24 @@ class CreateBookFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_create_book, container, false)
         rootView.findViewById<Button>(R.id.buttonSave).setOnClickListener{
-            val edtTitle = rootView.findViewById<EditText>(R.id.editTextTitle)
+            val edtTitle = rootView.findViewById<EditText>(R.id.edtBookTitle)
             val title = edtTitle.text.toString();
 
-            val edtAuthor = rootView.findViewById<EditText>(R.id.editTextAuthor);
+            val edtAuthor = rootView.findViewById<EditText>(R.id.edtBookAuthor);
             val author = edtAuthor.text.toString();
 
-            val edtDate = rootView.findViewById<EditText>(R.id.editTextDate);
+            val edtDate = rootView.findViewById<EditText>(R.id.edtBookDate);
             val date = edtDate.text.toString();
             val book = Book(title, author, date)
             listener.onBookCreated(book)
-
-
         }
+
+        ObjectAnimator.ofFloat(rootView.findViewById(R.id.constraintLayout), "translationY", 300f, 0f)
+            .apply{
+                interpolator = BounceInterpolator()
+                duration = 5000
+                start()
+            }
         return rootView
     }
 
@@ -52,4 +59,5 @@ class CreateBookFragment : Fragment() {
 
 interface BookCreator {
     fun onBookCreated(book: Book)
+    fun closeBookCreation()
 }

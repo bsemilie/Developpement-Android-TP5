@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), BookCreator {
     private val createBookActivityRequestCode = 1;
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity(), BookCreator {
         val bookListFragmentTransaction = supportFragmentManager.beginTransaction()
         bookListFragmentTransaction.replace(R.id.frame_layout, bookListFragment)
         bookListFragmentTransaction.commit()
+        buttonCreateBook.visibility = View.VISIBLE
 
     }
 
@@ -59,6 +61,8 @@ class MainActivity : AppCompatActivity(), BookCreator {
 
         fragmentTransaction.replace(R.id.frame_layout, createBookFragment)
         fragmentTransaction.commit()
+
+        buttonCreateBook.visibility = View.GONE
     }
 
     override fun onBookCreated(book: Book) {
@@ -66,6 +70,9 @@ class MainActivity : AppCompatActivity(), BookCreator {
         displayBookList()
     }
 
+    override fun closeBookCreation() {
+        displayBookList()
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
