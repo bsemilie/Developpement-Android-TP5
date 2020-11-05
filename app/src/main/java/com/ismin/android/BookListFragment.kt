@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ismin.android.R
@@ -13,14 +14,9 @@ import com.ismin.android.R
 private const val BOOKS = "books"
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BookListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BookListFragment : Fragment() {
 
-    private var books: ArrayList<Book> = arrayListOf()
+    private lateinit var books: ArrayList<Book>
 
     lateinit var bookAdapter: BookAdapter
     lateinit var recyclerView : RecyclerView
@@ -36,25 +32,20 @@ class BookListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.fragment_book_list, container, false)
         recyclerView = view.findViewById<RecyclerView>(R.id.f_list_book)
         bookAdapter = BookAdapter(books)
-        val layoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = bookAdapter
+        this.recyclerView.adapter = bookAdapter
+        val linearLayoutManager = LinearLayoutManager(context)
+        this.recyclerView.layoutManager = linearLayoutManager
 
+        val dividerItemDecoration = DividerItemDecoration(context, linearLayoutManager.orientation)
+        this.recyclerView.addItemDecoration(dividerItemDecoration)
         return view
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param books Array of books
-         * @return A new instance of fragment BookListFragment.
-         */
         @JvmStatic
         fun newInstance(books: ArrayList<Book>): BookListFragment{
             val bundle = Bundle();

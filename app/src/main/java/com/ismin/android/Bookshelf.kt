@@ -4,11 +4,9 @@ import java.time.LocalDate
 
 class Bookshelf {
 
-    private val bookshelf: ArrayList<Book>;
+    private val bookshelf: ArrayList<Book> = arrayListOf<Book>();
 
-    constructor() {
-        this.bookshelf = arrayListOf<Book>();
-    }
+
 
     fun addBook(book: Book) {
         if (this.bookshelf.isEmpty()) {

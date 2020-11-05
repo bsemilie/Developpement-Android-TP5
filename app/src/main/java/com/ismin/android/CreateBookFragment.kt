@@ -23,6 +23,10 @@ class CreateBookFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_create_book, container, false)
+
+        rootView.findViewById<View>(R.id.f_create_book_view_clicker).setOnClickListener{
+            listener.closeBookCreation()
+        }
         rootView.findViewById<Button>(R.id.buttonSave).setOnClickListener{
             val edtTitle = rootView.findViewById<EditText>(R.id.edtBookTitle)
             val title = edtTitle.text.toString();

@@ -5,39 +5,58 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), BookCreator {
     private val createBookActivityRequestCode = 1;
     var bookshelf = Bookshelf();
 
-    private val theLordOfTheRings = Book(
-        title = "The Lord of the Rings",
-        author = "J. R. R. Tolkien",
-        date = "1954-02-15"
-    )
+    private lateinit var bookService: BookService
 
-    private val theHobbit = Book(
-        title = "The Hobbit",
-        author = "J. R. R. Tolkien",
-        date = "1937-09-21"
-    )
-    private val aLaRechercheDuTempsPerdu = Book(
-        title = "À la recherche du temps perdu",
-        author = "Marcel Proust",
-        date = "1927"
-    );
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        this.bookshelf.addBook(theLordOfTheRings)
-        this.bookshelf.addBook(theHobbit)
-        this.bookshelf.addBook(aLaRechercheDuTempsPerdu)
 
 
-        displayBookList()
+        val retrofit = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://bookshelf-ebs.cleverapps.com")
+            .build()
+
+        bookService= retrofit.create(BookService::class.java)
+
+        bookService.getAllBooks().enqueue(object : Callback<ArrayList<Book>> {
+            override fun onResponse(
+                call: Call<ArrayList<Book>>,
+                response: Response<ArrayList<Book>>
+            ) {
+                val allBooks= response.body()
+                allBooks?.forEach{
+                    bookshelf.addBook(it)
+                }
+                val bookListFragment = BookListFragment.newInstance(bookshelf.getAllBooks())
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.frame_layout, bookListFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit()
+            }
+
+            override fun onFailure(call: Call<ArrayList<Book>>, t: Throwable) {
+                Toast.makeText(applicationContext, "Network error ${t.localizedMessage}", Toast.LENGTH_LONG).show()
+        }
+        }
+        )
+
 
     }
 
