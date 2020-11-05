@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), BookCreator {
 
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://bookshelf-ebs.cleverapps.com")
+            .baseUrl("https://bookshelf-ebs.cleverapps.io")
             .build()
 
         bookService= retrofit.create(BookService::class.java)
@@ -52,12 +52,17 @@ class MainActivity : AppCompatActivity(), BookCreator {
             }
 
             override fun onFailure(call: Call<ArrayList<Book>>, t: Throwable) {
-                Toast.makeText(applicationContext, "Network error ${t.localizedMessage}", Toast.LENGTH_LONG).show()
+                displayErrorToast(t)
         }
         }
         )
 
 
+    }
+
+    private fun displayErrorToast(t: Throwable) {
+        Toast.makeText(applicationContext, "Network error ${t.localizedMessage}", Toast.LENGTH_LONG)
+            .show()
     }
 
     fun goToCreation(view: View) {
@@ -85,8 +90,16 @@ class MainActivity : AppCompatActivity(), BookCreator {
     }
 
     override fun onBookCreated(book: Book) {
-        bookshelf.addBook(book)
-        displayBookList()
+        bookService.createBook(book).enqueue(object : Callback<Book> {
+            override fun onResponse(call: Call<Book>, response: Response<Book>) {
+                bookshelf.addBook(response.body()!!)
+                displayBookList()
+            }
+
+            override fun onFailure(call: Call<Book>, t: Throwable) {
+                displayErrorToast(t)
+            }
+        })
     }
 
     override fun closeBookCreation() {
